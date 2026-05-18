@@ -20,3 +20,6 @@ autopcr/http_server/client_version
 .pixi
 
 .vscode/
+# GitHub Actions disabled for now
+.github/workflows/
+
