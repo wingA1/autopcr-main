@@ -4,11 +4,13 @@
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 #
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 这份文档只解决一件事：
 
@@ -40,6 +42,7 @@
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 当前服务器上的项目根目录为：
 
 ```text
@@ -70,11 +73,13 @@
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ##
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 前端项目目录：
 
@@ -96,6 +101,7 @@ npm.cmd run build
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 将构建结果整理为压缩包，例如：
 
 ```text
@@ -113,6 +119,7 @@ scp "D:\Desktop\static.zip" root@<你的服务器IP>:/home/pcr/autopcr-main/
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 SSH 登录服务器后执行：
 
@@ -133,6 +140,7 @@ python3 _download_web.py ./static.zip
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 执行：
 
@@ -155,6 +163,7 @@ find /home/pcr/autopcr-main/autopcr/http_server/ClientApp -maxdepth 2 -type f | 
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 服务器最终运行的不是本地环境，也不是 IDE 里的调试方式，而是服务器上的独立 Web 服务模式。
 
@@ -179,6 +188,7 @@ _httpserver_test.py
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 服务器使用的是：
 
@@ -221,11 +231,13 @@ pip list
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ##
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```text
 /etc/systemd/system/autopcr.service
@@ -236,6 +248,7 @@ pip list
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```ini
 [Unit]
@@ -264,6 +277,7 @@ WantedBy=multi-user.target
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 修改服务文件后执行：
 
 ```bash
@@ -277,6 +291,7 @@ systemctl restart autopcr
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 systemctl status autopcr --no-pager -l
 journalctl -u autopcr -n 100 --no-pager
@@ -287,6 +302,7 @@ journalctl -u autopcr -n 100 --no-pager
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 journalctl -u autopcr -f
@@ -300,6 +316,7 @@ journalctl -u autopcr -f
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 以后每次更新，建议严格按下面顺序执行。
 
 ##
@@ -307,6 +324,7 @@ journalctl -u autopcr -f
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 本地只负责：
 
@@ -321,6 +339,7 @@ journalctl -u autopcr -f
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 将以下内容上传到服务器：
 
 - 新的前端压缩包，例如 `static.zip`
@@ -331,6 +350,7 @@ journalctl -u autopcr -f
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 ssh root@<你的服务器IP>
@@ -344,6 +364,7 @@ source venv/bin/activate
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 python3 _download_web.py ./static.zip
 ```
@@ -353,6 +374,7 @@ python3 _download_web.py ./static.zip
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 将新的后端代码同步到：
 
@@ -366,6 +388,7 @@ python3 _download_web.py ./static.zip
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 find /home/pcr/autopcr-main/ -name "__pycache__" -exec rm -rf {} +
 ```
@@ -375,6 +398,7 @@ find /home/pcr/autopcr-main/ -name "__pycache__" -exec rm -rf {} +
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 systemctl daemon-reload
@@ -386,6 +410,7 @@ systemctl restart autopcr
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 systemctl status autopcr --no-pager -l
@@ -402,11 +427,13 @@ journalctl -u autopcr -n 100 --no-pager
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ##
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 systemctl status autopcr --no-pager -l
@@ -418,6 +445,7 @@ systemctl status autopcr --no-pager -l
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 systemctl start autopcr
 ```
@@ -427,6 +455,7 @@ systemctl start autopcr
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 systemctl restart autopcr
@@ -438,6 +467,7 @@ systemctl restart autopcr
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 systemctl stop autopcr
 ```
@@ -447,6 +477,7 @@ systemctl stop autopcr
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 journalctl -u autopcr -n 100 --no-pager
@@ -458,6 +489,7 @@ journalctl -u autopcr -n 100 --no-pager
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 journalctl -u autopcr -f
 ```
@@ -468,6 +500,7 @@ journalctl -u autopcr -f
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 ss -ltnp | grep 13200
 ```
@@ -477,6 +510,7 @@ ss -ltnp | grep 13200
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 ps -ef | grep -i "autopcr\|python" | grep -v grep
@@ -490,6 +524,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 下面这些判断，是当前可以继续复用的。
 
 ##
@@ -497,6 +532,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 关键路径：
 
@@ -512,6 +548,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 不要再用本地环境去推断服务器依赖。
 
 服务器能不能跑，只看：
@@ -525,6 +562,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 不要只看代码目录是否存在。
 
 最终判断标准是：
@@ -537,6 +575,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 本地构建成功不等于上线成功。
 
@@ -555,6 +594,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 在之前排障过程中，有些方向是阶段性推演，现在不需要继续当作主线。
 
 ##
@@ -562,6 +602,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 本地只是辅助构建与预览。
 
@@ -572,6 +613,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 中间的分析过程对排障有用，但正式手册只保留：
 
@@ -584,6 +626,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 如果服务器已经能稳定运行，后续更重要的是：
 
@@ -600,6 +643,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 当前 AutoPCR 的最终交付逻辑可以概括为：
 
@@ -620,6 +664,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 这一章专门记录本次升级过程中已经真实遇到过的问题。
 
 目的不是回顾排障历史，而是为了让后续升级时，能更快定位问题、少走弯路。
@@ -630,11 +675,13 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ###
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 - 本地 `npm.cmd run build` 已成功
 - 浏览器打开服务器页面后，还是旧界面
@@ -645,6 +692,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 最常见原因不是前端没编译成功，而是：
 
@@ -662,6 +710,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 ```bash
 cd /home/pcr/autopcr-main
@@ -684,11 +733,13 @@ find /home/pcr/autopcr-main/autopcr/http_server/ClientApp -maxdepth 2 -type f | 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ###
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 - 服务器 `systemd` 启动失败
 - `journalctl -u autopcr` 中出现 `ModuleNotFoundError`
@@ -699,6 +750,7 @@ find /home/pcr/autopcr-main/autopcr/http_server/ClientApp -maxdepth 2 -type f | 
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 这是服务器升级时最容易遇到的问题之一。
 
@@ -717,6 +769,7 @@ find /home/pcr/autopcr-main/autopcr/http_server/ClientApp -maxdepth 2 -type f | 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ```bash
 cd /home/pcr/autopcr-main
 source venv/bin/activate
@@ -733,11 +786,13 @@ journalctl -u autopcr -n 100 --no-pager
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ###
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 - 服务能启动一点，但很快因为导入或上下文问题崩溃
 - 或者报一串与入口方式相关的错误
@@ -747,6 +802,7 @@ journalctl -u autopcr -n 100 --no-pager
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 这次升级中，一个核心教训就是：
 
@@ -765,6 +821,7 @@ _httpserver_test.py
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 检查 `/etc/systemd/system/autopcr.service` 中的 `ExecStart` 是否为：
 
 ```ini
@@ -779,11 +836,13 @@ ExecStart=/home/pcr/autopcr-main/venv/bin/python3 /home/pcr/autopcr-main/_httpse
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ###
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 日志中出现类似：
 
@@ -797,6 +856,7 @@ ModuleNotFoundError: No module named 'cv2'
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 新版功能链路引入了图像识别能力，而服务器又是无桌面环境，因此默认不会自带 OpenCV。
 
 ###
@@ -804,6 +864,7 @@ ModuleNotFoundError: No module named 'cv2'
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 在服务器 `venv` 中安装轻量无桌面版本：
 
@@ -820,11 +881,13 @@ pip install opencv-python-headless
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ###
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 可能出现：
 
@@ -838,6 +901,7 @@ pip install opencv-python-headless
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 这类问题一般不是业务逻辑问题，而是：
 
 - 系统底层库没装全
@@ -849,6 +913,7 @@ pip install opencv-python-headless
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 先补系统依赖，再在 `venv` 中强制重装 Pillow。
 
@@ -873,11 +938,13 @@ pip install --no-cache-dir --force-reinstall pillow
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ###
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 - 文件明明已经替换
 - 服务也重启了
@@ -889,6 +956,7 @@ pip install --no-cache-dir --force-reinstall pillow
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 常见原因有两个：
 
 - `__pycache__` 残留
@@ -899,6 +967,7 @@ pip install --no-cache-dir --force-reinstall pillow
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 先清理缓存：
 
@@ -925,11 +994,13 @@ systemctl status autopcr --no-pager -l
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 ###
 ## GitHub 仓库地址
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 升级后整体异常，但一时无法判断是：
 
@@ -944,6 +1015,7 @@ systemctl status autopcr --no-pager -l
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
 
+
 按下面顺序排查，不要跳步：
 
 ```bash
@@ -952,6 +1024,7 @@ systemctl status autopcr --no-pager -l
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 ls -lah /home/pcr/autopcr-main/autopcr/http_server/ClientApp
 
 
@@ -959,6 +1032,7 @@ ls -lah /home/pcr/autopcr-main/autopcr/http_server/ClientApp
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 systemctl status autopcr --no-pager -l
 
 
@@ -966,6 +1040,7 @@ systemctl status autopcr --no-pager -l
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 journalctl -u autopcr -n 100 --no-pager
 
 
@@ -973,6 +1048,7 @@ journalctl -u autopcr -n 100 --no-pager
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 ss -ltnp | grep 13200
 
 
@@ -980,6 +1056,7 @@ ss -ltnp | grep 13200
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 ps -ef | grep -i "autopcr\|python" | grep -v grep
 ```
 
@@ -990,6 +1067,7 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 
 - 后端仓库：[wingA1/autopcr-main](https://github.com/wingA1/autopcr-main)
 - 前端仓库：[wingA1/AutoPCR_Web](https://github.com/wingA1/AutoPCR_Web)
+
 
 下面这些内容在排障阶段讨论过，但后续维护时不必再当成主线：
 
@@ -1005,4 +1083,5 @@ ps -ef | grep -i "autopcr\|python" | grep -v grep
 4. 最后看日志报错具体指向什么
 
 只要这四层按顺序排，升级维护就会清晰很多。
+
 
