@@ -540,8 +540,7 @@ data: {ret}\n\n'''
                 if not await is_valid_qq(qq):
                     return "无效的QQ", 400
             usermgr.create(str(qq), str(password))
-            login_user(AuthUser(qq))
-            return "欢迎回来，" + qq, 200
+            return "注册成功，请使用新账号登录", 200
 
         @self.api.route('/logout', methods = ['POST'])
         @login_required
@@ -551,6 +550,120 @@ data: {ret}\n\n'''
             logout_user()
             return "再见, " + accountmgr.qid, 200
 
+
+                # ============ Data Center Aggregation APIs ============
+
+        import pickle
+        import hashlib
+        from ..model.enums import eInventoryType
+
+        def _get_cached_data(acc_obj):
+            try:
+                for pw in [acc_obj.data.password, '']:
+                    uid_hash = hashlib.md5(
+                        (acc_obj.data.username + pw).encode('utf-8')
+                    ).hexdigest()
+                    cache_path = os.path.join(CACHE_DIR, 'pool', uid_hash)
+                    if os.path.exists(cache_path):
+                        with open(cache_path, 'rb') as f:
+                            return pickle.loads(f.read())
+            except Exception:
+                pass
+            return None
+
+        def _map_status(raw):
+            smap = {'成功': 'done', '警告': 'partial', '错误': 'failed', '致命': 'failed', '跳过': 'skipped', '中止': 'partial'}
+            return smap.get(str(raw), 'pending')
+
+# ============ Data Center Aggregation APIs ============
+
+        @self.api.route('/datacenter/accounts/summary', methods=['POST'])
+        @HttpServer.login_required()
+        @HttpServer.wrapaccountmgr(readonly=True)
+        async def dc_summary(accountmgr: AccountManager):
+            data = await request.get_json()
+            aliases = data.get('aliases', [])
+            if not aliases:
+                aliases = list(accountmgr.accounts())
+            results = []
+            for alias in aliases:
+                try:
+                    async with accountmgr.load(alias, readonly=True) as acc:
+                        last = acc.get_last_daily_clean()
+                        results.append({
+                            'alias': alias,
+                            'daily_clean_time': last.time if last and last.time else '',
+                            'daily_clean_status': last.status.value if last and last.status else '',
+                        })
+                except Exception as e:
+                    results.append({'alias': alias, 'error': str(e)})
+            return results, 200
+
+        @self.api.route('/datacenter/actions/clean', methods=['POST'])
+        @HttpServer.login_required()
+        @HttpServer.wrapaccountmgr()
+        async def dc_batch_clean(accountmgr: AccountManager):
+            data = await request.get_json()
+            aliases = data.get('aliases', [])
+            if not aliases:
+                return '请选择至少一个账号', 400
+            results = []
+            for alias in aliases:
+                try:
+                    async with accountmgr.load(alias) as acc:
+                        await acc.do_daily(accountmgr.secret.clan)
+                        results.append({'alias': alias, 'success': True, 'message': '已触发清理'})
+                except Exception as e:
+                    results.append({'alias': alias, 'success': False, 'message': str(e)})
+            return results, 200
+
+        @self.api.route('/datacenter/account/<string:acc>/overview', methods=['GET'])
+        @HttpServer.login_required()
+        @HttpServer.wrapaccountmgr(readonly=True)
+        @HttpServer.wrapaccount(readonly=True)
+        async def dc_overview(account: Account):
+            dm = _get_cached_data(account)
+            last = account.get_last_daily_clean()
+            result = {'alias': account.alias}
+            if dm:
+                try:
+                    jewels = (dm.jewel.free_jewel or 0) + (dm.jewel.jewel or 0) if dm.jewel else 0
+                    mana = (dm.gold.gold_id_free or 0) + (dm.gold.gold_id_pay or 0) if dm.gold else 0
+                    sweep = dm.get_inventory((eInventoryType.Item, 23001))
+                    goddess = dm.get_inventory((eInventoryType.Item, 90005))
+                    heart = dm.get_inventory((eInventoryType.Equip, 140001))
+                    max_stam = 999
+                    try:
+                        from autopcr.db.database import db
+                        ti = db.team_info.get(dm.team_level)
+                        max_stam = ti.max_stamina if ti else 999
+                    except: pass
+                    total_power = 0
+                    if dm.unit:
+                        for uid in dm.unit:
+                            try: total_power += dm.get_unit_power(uid)
+                            except: pass
+                    result.update({
+                        'nickname': dm.user_name or '',
+                        'stamina': dm.stamina or 0,
+                        'stamina_max': max_stam,
+                        'level': dm.team_level or 0,
+                        'jewel': jewels,
+                        'mana': mana,
+                        'sweep_ticket': sweep,
+                        'goddess_stone': goddess,
+                        'heart_fragment': heart,
+                        'recover_stamina_count': dm.recover_stamina_exec_count or 0,
+                        'total_power': total_power,
+                    })
+                except: pass
+            result['daily_clean_time'] = last.time if last and last.time else ''
+            result['daily_clean_status'] = _map_status(last.status) if last and last.status else 'pending'
+            return result, 200
+
+# ============ End Data Center APIs ============
+
+# ============ End Data Center APIs ============
         # frontend
         @self.web.route("/", defaults={"path": ""})
         @self.web.route("/<path:path>")
