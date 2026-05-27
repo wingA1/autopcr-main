@@ -630,8 +630,14 @@ data: {ret}\n\n'''
                     jewels = (dm.jewel.free_jewel or 0) + (dm.jewel.jewel or 0) if dm.jewel else 0
                     mana = (dm.gold.gold_id_free or 0) + (dm.gold.gold_id_pay or 0) if dm.gold else 0
                     sweep = dm.get_inventory((eInventoryType.Item, 23001))
+                    arena_coin = dm.get_inventory((eInventoryType.Item, 90003))
+                    grand_arena_coin = dm.get_inventory((eInventoryType.Item, 90004))
                     goddess = dm.get_inventory((eInventoryType.Item, 90005))
                     heart = dm.get_inventory((eInventoryType.Equip, 140001))
+                    talent_level = ''
+                    try:
+                        talent_level = dm.get_talent_level_info()
+                    except: pass
                     max_stam = 999
                     try:
                         from autopcr.db.database import db
@@ -651,8 +657,11 @@ data: {ret}\n\n'''
                         'jewel': jewels,
                         'mana': mana,
                         'sweep_ticket': sweep,
+                        'arena_coin': arena_coin,
+                        'grand_arena_coin': grand_arena_coin,
                         'goddess_stone': goddess,
                         'heart_fragment': heart,
+                        'talent_level': talent_level,
                         'recover_stamina_count': dm.recover_stamina_exec_count or 0,
                         'total_power': total_power,
                     })
