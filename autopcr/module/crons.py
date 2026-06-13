@@ -17,6 +17,9 @@ CRONLOG_PATH = os.path.join(CACHE_DIR, "http_server", "cron_log.txt")
 _background_tasks = set()
 _background_task_keys = set()
 
+def background_task_count() -> int:
+    return len(_background_tasks)
+
 def _queue_background_task(coro, name: str, key: str = None):
     if key and key in _background_task_keys:
         logger.warning("skip background task %s because key %s is still active", name, key)
