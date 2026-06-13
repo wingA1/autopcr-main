@@ -15,28 +15,30 @@ from ..util.logger import instance as logger
 
 CRONLOG_PATH = os.path.join(CACHE_DIR, "http_server", "cron_log.txt")
 _background_tasks = set()
-_active_cron_qids = set()
+_background_task_keys = set()
 
-def _queue_background_task(coro, name: str):
+def _queue_background_task(coro, name: str, key: str = None):
+    if key and key in _background_task_keys:
+        logger.warning("skip background task %s because key %s is still active", name, key)
+        coro.close()
+        return None
+
+    if key:
+        _background_task_keys.add(key)
     task = asyncio.get_event_loop().create_task(coro)
     _background_tasks.add(task)
 
     def _release_task(done: asyncio.Task):
         _background_tasks.discard(done)
+        if key:
+            _background_task_keys.discard(key)
         if done.cancelled():
             logger.warning("background task %s cancelled", name)
             return
         try:
-            exc = done.exception()
+            done.result()
         except Exception:
-            logger.exception("background task %s failed while collecting result", name)
-            return
-        if exc:
-            logger.error(
-                "background task %s failed",
-                name,
-                exc_info=(type(exc), exc, exc.__traceback__)
-            )
+            logger.exception("background task %s failed", name)
 
     task.add_done_callback(_release_task)
     return task
@@ -65,7 +67,11 @@ async def _cron(task):
         cur = datetime.datetime.now()
         while cur.minute != last.minute or cur.hour != last.hour:
             last += datetime.timedelta(minutes=1)
-            _queue_background_task(task(last), f"cron-check-{db.format_time(last)}")
+            _queue_background_task(
+                task(last),
+                f"cron-check-{db.format_time(last)}",
+                key="cron-check"
+            )
 
 async def real_run_cron(accountmgr: AccountManager, accounts_to_run, cur):
     try:
@@ -85,7 +91,6 @@ async def real_run_cron(accountmgr: AccountManager, accounts_to_run, cur):
 
         await asyncio.gather(*[run_one_account(account) for account in accounts_to_run])
     finally:
-        _active_cron_qids.discard(accountmgr.qid)
         await accountmgr.__aexit__(None, None, None)
     
 
@@ -105,14 +110,12 @@ async def _run_crons(cur: datetime.datetime):
                         accounts_to_run.append(account)
             
             if accounts_to_run:
-                if accountmgr.qid in _active_cron_qids:
-                    logger.warning("skip cron job for %s because previous run is still active", accountmgr.qid)
-                else:
-                    _active_cron_qids.add(accountmgr.qid)
-                    _queue_background_task(
-                        real_run_cron(accountmgr, accounts_to_run, cur),
-                        f"cron-run-{accountmgr.qid}-{db.format_time(cur)}"
-                    )
+                task = _queue_background_task(
+                    real_run_cron(accountmgr, accounts_to_run, cur),
+                    f"cron-run-{accountmgr.qid}-{db.format_time(cur)}",
+                    key=f"cron-run:{accountmgr.qid}"
+                )
+                if task:
                     accountmgr = None
         finally:
             if accountmgr:
