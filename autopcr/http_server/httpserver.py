@@ -471,13 +471,13 @@ class HttpServer:
             if "text/event-stream" not in request.accept_mimetypes:
                 return "", 400
 
-            server_id = secrets.token_urlsafe(8)
-            self.validate_server[accountmgr.qid] = server_id
+            connection_token = object()
+            self.validate_server[accountmgr.qid] = connection_token
 
-            async def send_events(qid, server_id):
+            async def send_events(qid, connection_token):
                 try:
                     for _ in range(30):
-                        if self.validate_server.get(qid) != server_id:
+                        if self.validate_server.get(qid) is not connection_token:
                             break
                         validate = pop_validate(qid)
                         if validate:
@@ -489,11 +489,11 @@ data: {ret}\n\n'''
                         else:
                             await asyncio.sleep(1)
                 finally:
-                    if self.validate_server.get(qid) == server_id:
+                    if self.validate_server.get(qid) is connection_token:
                         self.validate_server.pop(qid, None)
 
             response = await quart.make_response(
-                send_events(accountmgr.qid, server_id),
+                send_events(accountmgr.qid, connection_token),
                 {
                     'Content-Type': 'text/event-stream',
                     'Cache-Control': 'no-cache',

@@ -25,9 +25,10 @@ validate_dict: Dict[str, List[ValidateInfo]] = defaultdict(list)
 validate_ok_dict: Dict[str, ValidateInfo] = {}
 _validate_queue_times: Dict[str, List[float]] = defaultdict(list)
 _validate_ok_times: Dict[str, float] = {}
+_pending_validate_times: Dict[str, float] = {}
 
 VALIDATE_PENDING_TTL = 180
-VALIDATE_OK_TTL = 180
+VALIDATE_OK_TTL = 300
 VALIDATE_QUEUE_MAX_SIZE = 5
 
 def cleanup_validate_cache():
@@ -61,13 +62,23 @@ def cleanup_validate_cache():
             validate_ok_dict.pop(id, None)
             _validate_ok_times.pop(id, None)
 
+    for id in list(_pending_validate_times.keys()):
+        if _pending_validate_times[id] + VALIDATE_PENDING_TTL < now:
+            _pending_validate_times.pop(id, None)
+            validate_ok_dict.pop(id, None)
+            _validate_ok_times.pop(id, None)
+
 def push_validate(qid: str, info: ValidateInfo):
     cleanup_validate_cache()
     validate_dict[qid].append(info)
     _validate_queue_times[qid].append(time.time())
+    if info.id:
+        _pending_validate_times[info.id] = time.time()
     while len(validate_dict[qid]) > VALIDATE_QUEUE_MAX_SIZE:
-        validate_dict[qid].pop(0)
+        removed = validate_dict[qid].pop(0)
         _validate_queue_times[qid].pop(0)
+        if removed.id:
+            _pending_validate_times.pop(removed.id, None)
 
 def pop_validate(qid: str):
     cleanup_validate_cache()
@@ -83,6 +94,7 @@ def pop_validate(qid: str):
 
 def remove_validate(qid: str, id: str):
     if qid not in validate_dict:
+        _pending_validate_times.pop(id, None)
         return
     for index, info in enumerate(validate_dict[qid]):
         if info.id == id:
@@ -93,11 +105,17 @@ def remove_validate(qid: str, id: str):
     if not validate_dict[qid]:
         validate_dict.pop(qid, None)
         _validate_queue_times.pop(qid, None)
+    _pending_validate_times.pop(id, None)
 
 def set_validate_ok(id: str, info: ValidateInfo):
     cleanup_validate_cache()
+    if id not in _pending_validate_times:
+        validate_ok_dict.pop(id, None)
+        _validate_ok_times.pop(id, None)
+        return False
     validate_ok_dict[id] = info
     _validate_ok_times[id] = time.time()
+    return True
 
 def pop_validate_ok(id: str):
     cleanup_validate_cache()
