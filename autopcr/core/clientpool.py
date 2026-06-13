@@ -150,13 +150,6 @@ class PoolClientWrapper(pcrclient):
             self.data = datamgr()
             self._data_wrapper.component = self.data
 
-    def discard_idle(self):
-        self._release_sema_if_needed()
-        self._base_keys = {}
-        self._keys = {}
-        self.data = datamgr()
-        self._data_wrapper.component = self.data
-
 class CountingSemaphore:
     def __init__(self, max_count):
         self._sema = asyncio.Semaphore(max_count)
@@ -228,7 +221,7 @@ class ClientPool:
     def _discard_pool_client(self, pool_key):
         client = self._pool.pop(pool_key, None)
         if client:
-            client.discard_idle()
+            client.deactivate()
 
     def _log_pool_status(self, now = None):
         now = now or int(time.time())
