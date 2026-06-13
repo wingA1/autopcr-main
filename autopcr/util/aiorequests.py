@@ -23,6 +23,9 @@ class AsyncResponse:
         self.raw_response.close()
         self._closed = True
 
+    def __del__(self):
+        self.close()
+
     @property
     def ok(self) -> bool:
         return self.raw_response.ok
@@ -74,7 +77,11 @@ class AsyncResponse:
             self.close()
     
     def raise_for_status(self):
-        self.raw_response.raise_for_status()
+        try:
+            self.raw_response.raise_for_status()
+        except Exception:
+            self.close()
+            raise
 
 
 async def request(method, url, **kwargs) -> AsyncResponse:
