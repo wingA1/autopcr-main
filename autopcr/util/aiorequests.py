@@ -15,6 +15,13 @@ _global_session = Session()
 class AsyncResponse:
     def __init__(self, response: requests.Response):
         self.raw_response = response
+        self._closed = False
+
+    def close(self):
+        if self._closed:
+            return
+        self.raw_response.close()
+        self._closed = True
 
     @property
     def ok(self) -> bool:
@@ -48,14 +55,23 @@ class AsyncResponse:
 
     @property
     async def content(self) -> Optional[bytes]:
-        return await run_sync_func(lambda: self.raw_response.content)
+        try:
+            return await run_sync_func(lambda: self.raw_response.content)
+        finally:
+            self.close()
 
     @property
     async def text(self) -> str:
-        return await run_sync_func(lambda: self.raw_response.text)
+        try:
+            return await run_sync_func(lambda: self.raw_response.text)
+        finally:
+            self.close()
 
     async def json(self, **kwargs) -> Any:
-        return await run_sync_func(self.raw_response.json, **kwargs)
+        try:
+            return await run_sync_func(self.raw_response.json, **kwargs)
+        finally:
+            self.close()
     
     def raise_for_status(self):
         self.raw_response.raise_for_status()
