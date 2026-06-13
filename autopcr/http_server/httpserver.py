@@ -11,7 +11,7 @@ from quart_auth import AuthUser, QuartAuth, Unauthorized, current_user, login_us
 from quart_compress import Compress
 from quart_rate_limiter import RateLimiter, rate_limit, RateLimitExceeded
 
-from .validator import validate_dict, ValidateInfo, validate_ok_dict, enable_manual_validator
+from .validator import ValidateInfo, enable_manual_validator, pop_validate, set_validate_ok
 from ..constants import CACHE_DIR, ALLOW_REGISTER, SUPERUSER
 from ..module.accountmgr import Account, AccountManager, instance as usermgr, AccountException, UserData, \
     PermissionLimitedException, UserDisabledException, UserException
@@ -475,17 +475,22 @@ class HttpServer:
             self.validate_server[accountmgr.qid] = server_id
 
             async def send_events(qid, server_id):
-                for _ in range(30):
-                    if self.validate_server[qid] != server_id:
-                        break
-                    if qid in validate_dict and validate_dict[qid]:
-                        ret = validate_dict[qid].pop().to_json()
-                        id = secrets.token_urlsafe(8)
-                        yield f'''id: {id}
+                try:
+                    for _ in range(30):
+                        if self.validate_server.get(qid) != server_id:
+                            break
+                        validate = pop_validate(qid)
+                        if validate:
+                            ret = validate.to_json()
+                            id = secrets.token_urlsafe(8)
+                            yield f'''id: {id}
 retry: 1000
 data: {ret}\n\n'''
-                    else:
-                        await asyncio.sleep(1)
+                        else:
+                            await asyncio.sleep(1)
+                finally:
+                    if self.validate_server.get(qid) == server_id:
+                        self.validate_server.pop(qid, None)
 
             response = await quart.make_response(
                 send_events(accountmgr.qid, server_id),
@@ -504,7 +509,7 @@ data: {ret}\n\n'''
             if 'id' not in data:
                 return "incorrect", 403
             id = data['id']
-            validate_ok_dict[id] = ValidateInfo.from_dict(data)
+            set_validate_ok(id, ValidateInfo.from_dict(data))
             return "", 200
 
         @self.api_limit.route('/login/qq', methods = ['POST'])

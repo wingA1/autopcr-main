@@ -150,6 +150,13 @@ class PoolClientWrapper(pcrclient):
             self.data = datamgr()
             self._data_wrapper.component = self.data
 
+    def discard_idle(self):
+        self._release_sema_if_needed()
+        self._base_keys = {}
+        self._keys = {}
+        self.data = datamgr()
+        self._data_wrapper.component = self.data
+
 class CountingSemaphore:
     def __init__(self, max_count):
         self._sema = asyncio.Semaphore(max_count)
@@ -183,12 +190,58 @@ class ClientPool:
 
         self._sema = CountingSemaphore(CLIENT_POOL_MAX_CLIENT_ALIVE)
         self._farm_sema = CountingSemaphore(CLIENT_POOL_MAX_FARMER_CLIENT_ALIVE)
+        self._last_status_log = 0
 
     def _on_sdk_login(self, client: PoolClientWrapper):
         client_key = id(client)
         if self.active_uids.get(client.uid, client_key) != client_key:
             raise PanicError('用户的另一项请求正在进行中')
         self.active_uids[client.uid] = client_key
+
+    def _cleanup_pool(self):
+        now = int(time.time())
+        active_client_keys = set(self.active_uids.values())
+        removed = 0
+
+        for pool_key, client in list(self._pool.items()):
+            if id(client) in active_client_keys:
+                continue
+            if client.last_access + CLIENT_POOL_MAX_AGE < now:
+                logger.debug("Discard idle client %s from pool by age", client.uid)
+                self._discard_pool_client(pool_key)
+                removed += 1
+
+        while len(self._pool) > CLIENT_POOL_SIZE_MAX:
+            pool_key, client = min(
+                self._pool.items(),
+                key=lambda item: item[1].last_access
+            )
+            if id(client) in active_client_keys:
+                break
+            logger.debug("Discard idle client %s from pool by size", client.uid)
+            self._discard_pool_client(pool_key)
+            removed += 1
+
+        if removed:
+            self._log_pool_status(now)
+
+    def _discard_pool_client(self, pool_key):
+        client = self._pool.pop(pool_key, None)
+        if client:
+            client.discard_idle()
+
+    def _log_pool_status(self, now = None):
+        now = now or int(time.time())
+        if now - self._last_status_log < 300:
+            return
+        self._last_status_log = now
+        logger.info(
+            "client pool status: idle=%d active=%d sema=%s farm_sema=%s",
+            len(self._pool),
+            len(self.active_uids),
+            self._sema.status(),
+            self._farm_sema.status()
+        )
 
     def _put_in_pool(self, client: PoolClientWrapper):
         client_key = id(client)
@@ -202,18 +255,19 @@ class ClientPool:
 
         pool_key = (client.session.sdk.account, type(client.session.sdk).__name__)
 
-        if len(self._pool) >= CLIENT_POOL_SIZE_MAX:
-            now = int(time.time())
-            while self._pool:
-                k, v = next(iter(self._pool.items()))
-                if v.last_access + CLIENT_POOL_MAX_AGE < now:
-                    self._pool.pop(k)
-                else:
-                    break
+        self._cleanup_pool()
+        while self._pool and len(self._pool) >= CLIENT_POOL_SIZE_MAX:
+            k, v = min(
+                self._pool.items(),
+                key=lambda item: item[1].last_access
+            )
+            logger.debug("Discard idle client %s from pool by size", v.uid)
+            self._discard_pool_client(k)
 
         logger.debug("Put client %s back to pool", client.uid)
         if len(self._pool) < CLIENT_POOL_SIZE_MAX:
             self._pool[pool_key] = client
+        self._log_pool_status()
 
     async def sema_require(self, pcrclient: PoolClientWrapper):
         if pcrclient.session.sdk._account.farm:
@@ -228,9 +282,12 @@ class ClientPool:
             self._sema.release()
 
     def sema_status(self):
+        self._cleanup_pool()
+        self._log_pool_status()
         return self._sema.status(), self._farm_sema.status()
 
     async def get_client(self, sdk: sdkclient) -> PoolClientWrapper:
+        self._cleanup_pool()
         pool_key = (sdk.account, type(sdk).__name__)
         if pool_key in self._pool:
             client = self._pool.pop(pool_key)
